@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bond Aggregation Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Bond State By Event</h1>
+
+      <section class="controls">
+        <label for="eventSlider">Event</label>
+        <input
+          id="eventSlider"
+          type="range"
+          min="1"
+          max="{{ max_event }}"
+          value="{{ max_event }}"
+        />
+        <input
+          id="eventInput"
+          type="number"
+          min="1"
+          max="{{ max_event }}"
+          value="{{ max_event }}"
+        />
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+      </section>
+
+      <section class="event-impact">
+        <h2>Current Event</h2>
+        <p id="eventImpactText">-</p>
+      </section>
+
+      <section class="tables">
+        <h2>State Of 5 Bonds</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Bond</th>
+              <th>Qty</th>
+              <th>Clean</th>
+              <th>AI</th>
+              <th>Dirty</th>
+              <th>PV</th>
+            </tr>
+          </thead>
+          <tbody id="bondsBody"></tbody>
+        </table>
+      </section>
+
+      <section class="tables">
+        <h2>PNL Query Engine</h2>
+        <div class="query-controls">
+          <label for="fromEventInput">PNL Since Event K</label>
+          <input
+            id="fromEventInput"
+            type="number"
+            min="1"
+            max="{{ max_event }}"
+            value="1"
+          />
+          <button id="runPnlBtn">Run Query</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Bond</th>
+              <th>PV(Current)</th>
+              <th>PV(Event K)</th>
+              <th>PNL Since K</th>
+            </tr>
+          </thead>
+          <tbody id="pnlBody"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
