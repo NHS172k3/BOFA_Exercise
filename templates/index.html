@@ -77,6 +77,49 @@
           <tbody id="pnlBody"></tbody>
         </table>
       </section>
+
+      <section class="tables">
+        <h2>Bonus Queries</h2>
+        <p>
+          Total PV by desk, total PV by trader, and PV for a specific bond ID.
+        </p>
+
+        <div class="bonus-grid">
+          <div>
+            <h3>PV By Desk</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Desk</th>
+                  <th>Total PV</th>
+                </tr>
+              </thead>
+              <tbody id="deskPvBody"></tbody>
+            </table>
+          </div>
+
+          <div>
+            <h3>PV By Trader</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Trader</th>
+                  <th>Desk</th>
+                  <th>Total PV</th>
+                </tr>
+              </thead>
+              <tbody id="traderPvBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="query-controls">
+          <label for="bondIdInput">Specific Bond ID</label>
+          <input id="bondIdInput" type="text" value="BOND1" />
+          <button id="runBondQueryBtn">Run Bond Query</button>
+        </div>
+        <p id="bondQueryResult">-</p>
+      </section>
     </main>
 
     <script src="/static/app.js"></script>

@@ -2,14 +2,20 @@ const eventSlider = document.getElementById("eventSlider");
 const eventInput = document.getElementById("eventInput");
 const bondsBody = document.getElementById("bondsBody");
 const pnlBody = document.getElementById("pnlBody");
+const deskPvBody = document.getElementById("deskPvBody");
+const traderPvBody = document.getElementById("traderPvBody");
 const eventImpactText = document.getElementById("eventImpactText");
 const fromEventInput = document.getElementById("fromEventInput");
 const runPnlBtn = document.getElementById("runPnlBtn");
+const bondIdInput = document.getElementById("bondIdInput");
+const runBondQueryBtn = document.getElementById("runBondQueryBtn");
+const bondQueryResult = document.getElementById("bondQueryResult");
 
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
 const BONDS = ["BOND1", "BOND2", "BOND3", "BOND4", "BOND5"];
+let currentEventId = Number(eventSlider.value);
 
 function money(v) {
   return Number(v).toLocaleString(undefined, {
@@ -56,6 +62,19 @@ async function loadSnapshot(eventId) {
         </tr>`
     )
     .join("");
+
+  deskPvBody.innerHTML = rollupsData.desk
+    .map(
+      (row) => `<tr><td>${row.desk}</td><td>${money(row.present_value)}</td></tr>`
+    )
+    .join("");
+
+  traderPvBody.innerHTML = rollupsData.trader
+    .map(
+      (row) =>
+        `<tr><td>${row.trader}</td><td>${row.desk}</td><td>${money(row.present_value)}</td></tr>`
+    )
+    .join("");
 }
 
 async function loadBondWisePnl(eventId) {
@@ -82,10 +101,28 @@ async function loadBondWisePnl(eventId) {
   }).join("");
 }
 
+async function runBondIdQuery() {
+  const bondId = (bondIdInput.value || "").trim().toUpperCase();
+  if (!bondId) {
+    bondQueryResult.textContent = "Enter a Bond ID, for example BOND1.";
+    return;
+  }
+
+  const res = await fetch(`/api/bond/${bondId}?event=${currentEventId}`);
+  if (!res.ok) {
+    bondQueryResult.textContent = `Query failed for ${bondId}.`;
+    return;
+  }
+
+  const data = await res.json();
+  bondQueryResult.textContent = `${bondId} at event ${currentEventId} -> PV ${money(data.present_value)} | Qty ${data.quantity}`;
+}
+
 function setEvent(eventId) {
   const min = Number(eventSlider.min);
   const max = Number(eventSlider.max);
   const safe = Math.max(min, Math.min(max, Number(eventId)));
+  currentEventId = safe;
   eventSlider.value = String(safe);
   eventInput.value = String(safe);
   Promise.all([loadSnapshot(safe), loadBondWisePnl(safe)]);
@@ -97,5 +134,6 @@ eventInput.addEventListener("change", () => setEvent(eventInput.value));
 prevBtn.addEventListener("click", () => setEvent(Number(eventSlider.value) - 1));
 nextBtn.addEventListener("click", () => setEvent(Number(eventSlider.value) + 1));
 runPnlBtn.addEventListener("click", () => setEvent(Number(eventSlider.value)));
+runBondQueryBtn.addEventListener("click", runBondIdQuery);
 
 setEvent(eventSlider.value);
