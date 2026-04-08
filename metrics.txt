@@ -1,0 +1,5 @@
+Position  = Sum of Buy Quantity - Sum of Sell Quantity
+Accrued Interest = coupon_rate/frequency * accrued_fraction * face_value
+Dirty Price = Clean Price + Accrued Interest
+Present Value = Position * Dirty Price
+Change in Present Value = Present value after event - Present Value before event
